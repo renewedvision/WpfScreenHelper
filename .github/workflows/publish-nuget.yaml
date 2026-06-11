@@ -1,0 +1,66 @@
+name: publish
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+
+jobs:
+  build-and-publish-nuget:
+    name: build and publish nuget
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # get full history to make sure tags are included and thus git-describe works
+
+      - name: Setup .NET 10.0.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Get version number
+        id: version
+        uses: PaulHatch/semantic-version@v5.4.0
+
+      - name: Generate semver version number
+        id: generate-version
+        shell: powershell
+        run: |
+          if("${{ steps.version.outputs.is_tagged }}" -eq "false")
+          {
+            $semver_version = "${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}-beta.${{ steps.version.outputs.increment }}"
+          }
+          else
+          {
+            $semver_version = "${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}"
+          }
+
+          $assembly_version = "${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}.${{ steps.version.outputs.increment }}"
+
+          echo assembly-version=${assembly_version} >> $env:GITHUB_OUTPUT
+          echo semantic-version=${semver_version} >> $env:GITHUB_OUTPUT
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build and Package
+        id: build
+        shell: powershell
+        run: |
+          dotnet build WpfScreenHelper.sln -p:Version="${{ steps.generate-version.outputs.semantic-version }}" -p:AssemblyVersion="${{ steps.generate-version.outputs.assembly-version }}" -t:Rebuild -c Release
+
+      - name: Publish Nuget to GitHub registry
+        shell: powershell
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          foreach($file in (Get-ChildItem . -Recurse -Include *.nupkg)) {
+            dotnet nuget push $file `
+              --source "https://nuget.pkg.github.com/renewedvision/index.json" `
+              --api-key $env:GITHUB_TOKEN `
+              --skip-duplicate `
+              --timeout 900
+          }
