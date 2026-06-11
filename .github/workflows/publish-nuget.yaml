@@ -2,7 +2,7 @@ name: publish
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - "*"
 
@@ -10,6 +10,9 @@ jobs:
   build-and-publish-nuget:
     name: build and publish nuget
     runs-on: windows-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.3
@@ -45,13 +48,17 @@ jobs:
           echo semantic-version=${semver_version} >> $env:GITHUB_OUTPUT
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore WpfScreenHelper.sln
 
       - name: Build and Package
         id: build
         shell: powershell
         run: |
-          dotnet build WpfScreenHelper.sln -p:Version="${{ steps.generate-version.outputs.semantic-version }}" -p:AssemblyVersion="${{ steps.generate-version.outputs.assembly-version }}" -t:Rebuild -c Release
+          dotnet build WpfScreenHelper.sln `
+            -p:Version="${{ steps.generate-version.outputs.semantic-version }}" `
+            -p:AssemblyVersion="${{ steps.generate-version.outputs.assembly-version }}" `
+            -c Release `
+            --no-restore
 
       - name: Publish Nuget to GitHub registry
         shell: powershell
