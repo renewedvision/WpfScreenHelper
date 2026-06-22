@@ -10,7 +10,7 @@
     <PackageId>RenewedVision.WpfScreenHelper</PackageId>
     <PackageProjectUrl>https://github.com/renewedvision/WpfScreenHelper</PackageProjectUrl>
     <Description>Porting of Windows Forms Screen helper for Windows Presentation Foundation (WPF). It avoids dependencies on Windows Forms libraries when developing in WPF.</Description>
-    <Copyright>Copyright Michael Denny 2019 & Contributors (see GitHub repo)</Copyright>
+    <Copyright>Copyright Michael Denny 2019</Copyright>
     <PackageTags>WPF Screen Monitor Display Helper</PackageTags>
     <RepositoryUrl>https://github.com/renewedvision/WpfScreenHelper</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
