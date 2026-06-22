@@ -66,7 +66,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           foreach($file in (Get-ChildItem . -Recurse -Include *.nupkg)) {
-            dotnet nuget push $file `
+            $path = $file.FullName
+            echo "Publishing $path"
+            dotnet nuget push $path `
               --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" `
               --api-key $env:GITHUB_TOKEN `
               --skip-duplicate `
