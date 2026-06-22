@@ -65,7 +65,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          foreach($file in (Get-ChildItem . -Recurse -Include *.nupkg)) {
+          foreach($file in (Get-ChildItem ./package -Include *.nupkg)) {
             $path = $file.FullName
             echo "Publishing $path"
             dotnet nuget push $path `
