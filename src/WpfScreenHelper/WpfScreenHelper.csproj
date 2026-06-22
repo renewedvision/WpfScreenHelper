@@ -4,13 +4,13 @@
     <TargetFrameworks>net40;net8.0-windows;net9.0-windows;net10.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyName>WpfScreenHelper</AssemblyName>
+    <AssemblyName>RenewedVision.WpfScreenHelper</AssemblyName>
     <Title>Screen Helper for WPF</Title>
     <Authors>Michael Denny, Contributors (see GitHub repo)</Authors>
-    <PackageId>WpfScreenHelper</PackageId>
+    <PackageId>RenewedVision.WpfScreenHelper</PackageId>
     <PackageProjectUrl>https://github.com/renewedvision/WpfScreenHelper</PackageProjectUrl>
     <Description>Porting of Windows Forms Screen helper for Windows Presentation Foundation (WPF). It avoids dependencies on Windows Forms libraries when developing in WPF.</Description>
-    <Copyright>Copyright Michael Denny 2019</Copyright>
+    <Copyright>Copyright Michael Denny 2019 & Contributors (see GitHub repo)</Copyright>
     <PackageTags>WPF Screen Monitor Display Helper</PackageTags>
     <RepositoryUrl>https://github.com/renewedvision/WpfScreenHelper</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
